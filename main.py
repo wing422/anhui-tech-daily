@@ -4,8 +4,8 @@ import os
 
 
 client = OpenAI(
-    api_key=os.environ["OPENROUTER_API_KEY"],
-    base_url="https://openrouter.ai/api/v1"
+    api_key=os.environ["DASHSCOPE_API_KEY"],
+    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
 )
 
 
@@ -33,7 +33,7 @@ prompt = """
 
 
 response = client.chat.completions.create(
-    model="qwen/qwen-2.5-7b-instruct:free",
+    model="qwen-plus",
     messages=[
         {
             "role": "user",
