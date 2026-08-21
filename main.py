@@ -3,7 +3,6 @@ import requests
 import os
 
 
-# 阿里百炼 DashScope
 client = OpenAI(
     api_key=os.environ["DASHSCOPE_API_KEY"],
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
@@ -14,8 +13,7 @@ prompt = """
 请生成《安徽前沿科技动态日报》。
 
 重点关注：
-- 合肥
-- 安徽
+合肥、安徽。
 
 领域：
 1. 人工智能
@@ -25,32 +23,33 @@ prompt = """
 5. 生物科技
 
 要求：
-- Markdown格式
-- 包含今日重点
-- 包含产业动态
-- 包含科研突破
-- 包含融资信息
-- 中文输出
-- 内容真实，不要编造不存在的新闻
+1. Markdown格式
+2. 今日重点
+3. 产业动态
+4. 科研突破
+5. 融资信息
+6. 中文输出
+7. 如果没有真实新闻，请明确写暂无，不要编造
 """
 
 
 response = client.chat.completions.create(
-    model="qwen-turbo",
+    model="qwen2.5-7b-instruct",
     messages=[
         {
             "role": "user",
             "content": prompt
         }
-    ]
+    ],
+    temperature=0.7
 )
 
 
 report = response.choices[0].message.content
 
 
-# 飞书机器人
 webhook = os.environ["FEISHU_WEBHOOK"]
+
 
 requests.post(
     webhook,
@@ -60,7 +59,7 @@ requests.post(
             "text": report
         }
     },
-    timeout=10
+    timeout=20
 )
 
 
