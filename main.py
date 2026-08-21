@@ -33,7 +33,7 @@ prompt = """
 
 
 response = client.chat.completions.create(
-    model="meta-llama/llama-3.3-70b-instruct:free",
+    model="qwen/qwen-2.5-7b-instruct:free",
     messages=[
         {
             "role": "user",
