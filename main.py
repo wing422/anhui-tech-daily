@@ -4,8 +4,8 @@ import os
 
 
 client = OpenAI(
-    api_key=os.environ["DEEPSEEK_API_KEY"],
-    base_url="https://api.deepseek.com"
+    api_key=os.environ["OPENROUTER_API_KEY"],
+    base_url="https://openrouter.ai/api/v1"
 )
 
 
@@ -33,7 +33,7 @@ prompt = """
 
 
 response = client.chat.completions.create(
-    model="deepseek-chat",
+    model="qwen/qwen-2.5-72b-instruct:free",
     messages=[
         {
             "role": "user",
