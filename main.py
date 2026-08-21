@@ -3,6 +3,7 @@ import requests
 import os
 
 
+# 阿里百炼 DashScope
 client = OpenAI(
     api_key=os.environ["DASHSCOPE_API_KEY"],
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
@@ -29,11 +30,13 @@ prompt = """
 - 包含产业动态
 - 包含科研突破
 - 包含融资信息
+- 中文输出
+- 内容真实，不要编造不存在的新闻
 """
 
 
 response = client.chat.completions.create(
-    model="google/gemma-3-27b-it:free",
+    model="qwen-turbo",
     messages=[
         {
             "role": "user",
@@ -46,15 +49,19 @@ response = client.chat.completions.create(
 report = response.choices[0].message.content
 
 
+# 飞书机器人
+webhook = os.environ["FEISHU_WEBHOOK"]
+
 requests.post(
-    os.environ["FEISHU_WEBHOOK"],
+    webhook,
     json={
         "msg_type": "text",
         "content": {
             "text": report
         }
-    }
+    },
+    timeout=10
 )
 
 
-print("发送成功")
+print("安徽科技日报发送成功")
