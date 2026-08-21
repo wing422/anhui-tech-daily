@@ -5,62 +5,58 @@ import os
 
 client = OpenAI(
     api_key=os.environ["DASHSCOPE_API_KEY"],
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
+    base_url="https://ws-kf91ptx5k3159d6p.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 )
 
 
 prompt = """
-请生成《安徽前沿科技动态日报》。
+请生成《安徽科技日报》。
 
-重点关注：
-合肥、安徽。
+重点：
+- 合肥
+- 安徽
 
-领域：
+方向：
 1. 人工智能
 2. 具身智能
-3. 可控核聚变
-4. 量子科技
+3. 量子科技
+4. 可控核聚变
 5. 生物科技
 
 要求：
-1. Markdown格式
-2. 今日重点
-3. 产业动态
-4. 科研突破
-5. 融资信息
-6. 中文输出
-7. 如果没有真实新闻，请明确写暂无，不要编造
+- Markdown格式
+- 今日重点
+- 产业动态
+- 科研突破
+- 融资信息
+- 中文输出
 """
 
 
 response = client.chat.completions.create(
-    model="qwen2.5-7b-instruct",
+    model="qwen-turbo",
     messages=[
         {
             "role": "user",
             "content": prompt
         }
-    ],
-    temperature=0.7
+    ]
 )
 
 
 report = response.choices[0].message.content
 
 
-webhook = os.environ["FEISHU_WEBHOOK"]
-
-
 requests.post(
-    webhook,
+    os.environ["FEISHU_WEBHOOK"],
     json={
-        "msg_type": "text",
-        "content": {
-            "text": report
+        "msg_type":"text",
+        "content":{
+            "text":report
         }
     },
     timeout=20
 )
 
 
-print("安徽科技日报发送成功")
+print("发送成功")
