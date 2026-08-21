@@ -33,7 +33,7 @@ prompt = """
 
 
 response = client.chat.completions.create(
-    model="qwen-plus",
+    model="google/gemma-3-27b-it:free",
     messages=[
         {
             "role": "user",
